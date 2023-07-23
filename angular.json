@@ -30,7 +30,7 @@
         }
       },
       "root": "",
-      "sourceRoot": "src", 
+      "sourceRoot": "src",
       "prefix": "app",
       "architect": {
         "build": {
@@ -47,7 +47,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "./node_modules/@syncfusion/ej2-material-theme/styles/material.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -116,7 +117,8 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "./node_modules/@syncfusion/ej2-material-theme/styles/material.css"
             ],
             "scripts": [],
             "assets": [

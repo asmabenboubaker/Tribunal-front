@@ -3,6 +3,12 @@ import { TranslateService } from '@ngx-translate/core';
 import { AppSettings } from './app.settings';
 import { Settings } from './app.settings.model';
 
+import {
+  ScheduleComponent, ActionEventArgs, PopupOpenEventArgs, EventRenderedArgs, RenderCellEventArgs, DragAndDropService,
+  TimelineViewsService, GroupModel, EventSettingsModel, ResizeService, TimeScaleModel, WorkHoursModel, View
+} from '@syncfusion/ej2-angular-schedule';
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

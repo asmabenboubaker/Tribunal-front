@@ -30,6 +30,8 @@ import { BlankComponent } from './pages/blank/blank.component';
 import { SearchComponent } from './pages/search/search.component';
 import { NotFoundComponent } from './pages/errors/not-found/not-found.component';
 import { FlagsMenuComponent } from './theme/components/flags-menu/flags-menu.component';
+import { ScheduleModule, RecurrenceEditorModule , DayService,WeekService,WorkWeekService,MonthService,MonthAgendaService } from '@syncfusion/ej2-angular-schedule';
+import { SchedulerComponent } from './pages/scheduler/scheduler.component';
 
 @NgModule({  
   imports: [
@@ -43,7 +45,8 @@ import { FlagsMenuComponent } from './theme/components/flags-menu/flags-menu.com
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
-    })
+    }),
+    ScheduleModule, RecurrenceEditorModule
   ],
   declarations: [
     AppComponent,
@@ -59,11 +62,15 @@ import { FlagsMenuComponent } from './theme/components/flags-menu/flags-menu.com
     BlankComponent,
     SearchComponent,    
     NotFoundComponent,
-    FlagsMenuComponent
+    FlagsMenuComponent,
+    SchedulerComponent
   ],
   providers: [ 
     AppSettings,
-    { provide: PERFECT_SCROLLBAR_CONFIG, useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG }
+    { provide: PERFECT_SCROLLBAR_CONFIG, useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG },
+    DayService,
+    WeekService,WorkWeekService,MonthService,MonthAgendaService
+
   ],
   bootstrap: [ AppComponent ]
 })
