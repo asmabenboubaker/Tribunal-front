@@ -26,6 +26,7 @@
     "@syncfusion/ej2-data": "^22.1.38",
     "@syncfusion/ej2-material-theme": "~22.1.38",
     "bootstrap": "4.6.1",
+    "date-fns": "^2.30.0",
     "font-awesome": "4.7.0",
     "intl": "1.2.5",
     "jquery": "3.5.1",

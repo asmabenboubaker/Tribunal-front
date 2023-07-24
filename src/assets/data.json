@@ -1,0 +1,26 @@
+[
+  {
+    "idAudience": 1,
+    "dateAudience": "2023-07-24T10:00:00Z",
+    "tribunal": "Sample Tribunal1",
+    "juge": "Sample Juge",
+    "objet": "Sample Objet"
+    
+  },
+
+  {
+    "idAudience": 2,
+    "dateAudience": "2023-07-25T10:00:00Z",
+    "tribunal": "Sample Tribunal2",
+    "juge": "Sample Juge",
+    "objet": "Sample Objet"
+  }, 
+  {
+    "idAudience": 3,
+    "dateAudience": "2023-07-26T10:00:00Z",
+    "tribunal": "Sample Tribunal3",
+    "juge": "Sample Juge",
+    "objet": "Sample Objet"
+  }
+  
+]
