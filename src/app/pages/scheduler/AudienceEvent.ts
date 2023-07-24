@@ -3,9 +3,9 @@ export interface AudienceEvent {
   Subject: string;
 
   StartTime: string;
-  EndTime: string;
+  EndTime: string; 
   IsAllDay: boolean,
-  
+  startTime: string;
   idAudience: number;
   Location: string;
   juge: string;
