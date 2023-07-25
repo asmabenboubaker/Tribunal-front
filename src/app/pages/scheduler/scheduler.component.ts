@@ -4,6 +4,7 @@ import { ButtonComponent } from '@syncfusion/ej2-angular-buttons';
 import { AudienceService } from 'src/app/service/audience.service';
 import { AudienceEvent } from './AudienceEvent'; 
 import { parseISO } from 'date-fns';
+import { DataManager, ODataV4Adaptor } from '@syncfusion/ej2-data';
 
 @Component({
   selector: 'app-scheduler',
@@ -15,7 +16,7 @@ import { parseISO } from 'date-fns';
 })
 export class SchedulerComponent implements OnInit{
   ngOnInit(): void {
-    this.loadAudienceEvents();
+    // this.loadAudienceEvents();
   }
   constructor(private audienceService: AudienceService) {}
 
@@ -23,13 +24,28 @@ export class SchedulerComponent implements OnInit{
   @ViewChild("addButton") addButton?: ButtonComponent;
   public selectedDate: Date = new Date(2023, 7, 24);
   public scheduleViews: View[] = ['Day', 'Week', 'WorkWeek', 'Month'];
-  public eventSettings2: EventSettingsModel = {
-    dataSource: [ ]};
+  private dataManager: DataManager = new DataManager({
+    url: 'http://localhost:8081/picosoft/list',
+    adaptor: new ODataV4Adaptor,
+    crossDomain: true
+  });
   public eventSettings: EventSettingsModel = {
-    dataSource: [   
+    includeFiltersInQuery: true, dataSource: this.dataManager, fields: {
+      id: 'Id',
+      subject: { name: 'subject' },
+      location: { name: 'location' },
+      description: { name: 'description' },
+      startTime: { name: 'startTime' },
+      endTime: { name: 'endTime' }
+      // recurrenceRule: { name: 'ShipRegion' }
+    }
+  };
+
+  // public eventSettings: EventSettingsModel = {
+    // dataSource: [   
     //   {
      
-    //     Subject: 'Testing',
+    //     Subject: 'Testingaaaaaaaaaa',
     //     StartTime: "2023-07-24T06:00:00.000Z",
     //     EndTime: "2023-07-24T06:00:00.000Z",
     //     startTime: "2023-07-24T06:00:00.000Z",
@@ -50,7 +66,7 @@ export class SchedulerComponent implements OnInit{
     //   // endTime: "2023-07-24T11:00:00.000Z",
         
     //   //   description: "zzzzzzzzzzzzzzzzzzzzzzzzzzz",
-    //      Subject: "Testing 2",
+    //      Subject: "Testing 2oooooooooooo",
     //     isAllDay: false
     // },
       // {
@@ -66,8 +82,8 @@ export class SchedulerComponent implements OnInit{
         
       //   Description: 'A celestial event in the Betelgeuse star system.'
       // }
-    ]  
-  };
+  //   ]  
+  // };
   // loadAudienceEvents(): void {
   //   console.log('Error fetching audience events')
   //   this.audienceService.getAudienceEvents().subscribe(
@@ -100,35 +116,35 @@ export class SchedulerComponent implements OnInit{
   // }
 
 
-  loadAudienceEvents(): void {
-    this.audienceService.getAudienceEvents().subscribe(
-      (data: Record<string, any>[]) => {
-        console.log("DATA :::: ",data); 
-        data.forEach(event => {
-          event.StartTime = parseISO(event.StartTime);
-          event.EndTime = new Date(event.EndTime).toISOString
-          event.startTime= parseISO(event.startTime);
-          event.endTime = new Date(event.endTime).toISOString
-          console.log(  event.StartTime);
-        });
+  // loadAudienceEvents(): void {
+  //   this.audienceService.getAudienceEvents().subscribe(
+  //     (data: Record<string, any>[]) => {
+  //       console.log("DATA :::: ",data); 
+  //       data.forEach(event => {
+  //         event.StartTime = parseISO(event.StartTime);
+  //         event.EndTime = new Date(event.EndTime).toISOString
+  //         event.startTime= parseISO(event.startTime);
+  //         event.endTime = new Date(event.endTime).toISOString
+  //         console.log(  event.StartTime);
+  //       });
         
-        this.eventSettings.dataSource = data;
-        this.initializeCalendar();
-      },
-      (error: any) => {
-        console.log('Error fetching audience events:', error);
-      },
-       () => {
-      //   // After fetching and setting the data, call the initialization method.
+  //       this.eventSettings.dataSource = data;
+  //       this.initializeCalendar();
+  //     },
+  //     (error: any) => {
+  //       console.log('Error fetching audience events:', error);
+  //     },
+  //      () => {
+  //     //   // After fetching and setting the data, call the initialization method.
         
         
-      //   this.initializeCalendar();
-      console.log("dataSource STARTIME ::::: ", new Date(this.eventSettings.dataSource[0].startTime));
-       }
+  //     //   this.initializeCalendar();
+  //     console.log("dataSource STARTIME ::::: ", new Date(this.eventSettings.dataSource[0].startTime));
+  //      }
       
-    );
-    console.log("dataSource[0] II : ", this.eventSettings.dataSource[0]);
-  }
+  //   );
+  //   console.log("dataSource[0] II : ", this.eventSettings.dataSource[0]);
+  // }
 
   initializeCalendar(): void {
     // The method to initialize the calendar should be called after data is set.
