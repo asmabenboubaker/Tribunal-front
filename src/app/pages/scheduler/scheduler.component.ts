@@ -1,4 +1,4 @@
-import { Component,OnInit, ViewChild } from '@angular/core';
+import { Component,Input,OnInit, ViewChild } from '@angular/core';
 import { ScheduleComponent, EventSettingsModel, DayService, WeekService, WorkWeekService, MonthService, View, DragEventArgs, PopupOpenEventArgs } from '@syncfusion/ej2-angular-schedule';
 import { ButtonComponent } from '@syncfusion/ej2-angular-buttons';
 import { AudienceService } from 'src/app/service/audience.service';
@@ -108,7 +108,7 @@ onPopupOpen(args: PopupOpenEventArgs): void {
           });
           
           let inputEle: HTMLInputElement = createElement('input', {
-              className: 'e-field', attrs: { name: 'juge' }
+              className: '', attrs: { name: 'juge' }
           }) as HTMLInputElement;
           
           container.appendChild(container2);
