@@ -14,4 +14,8 @@ export class AudienceService {
   getAudienceEvents(): Observable<AudienceEvent[]> {
     return this.http.get<AudienceEvent[]>(this.apiUrl);
   }
+  getAudienceEventsByLocation(location: string): Observable<any[]> {
+    const Url = `http://localhost:8081/picosoft/api/schedule/selectByLocation?location=${location}`;
+    return this.http.post<any[]>(Url, location);
+  }
 }

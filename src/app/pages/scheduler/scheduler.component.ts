@@ -1,29 +1,74 @@
 import { Component,Input,OnInit, ViewChild } from '@angular/core';
 import { ScheduleComponent, EventSettingsModel, DayService, WeekService, WorkWeekService, MonthService, View, DragEventArgs, PopupOpenEventArgs } from '@syncfusion/ej2-angular-schedule';
-import { ButtonComponent } from '@syncfusion/ej2-angular-buttons';
+import { ButtonComponent, ChangeEventArgs } from '@syncfusion/ej2-angular-buttons';
 import { AudienceService } from 'src/app/service/audience.service';
 import { AudienceEvent } from './AudienceEvent'; 
 import { parseISO } from 'date-fns';
-import { DataManager, ODataV4Adaptor, UrlAdaptor } from '@syncfusion/ej2-data';
+import { DataManager, ODataV4Adaptor, ReturnOption, UrlAdaptor } from '@syncfusion/ej2-data';
 import { createElement } from '@syncfusion/ej2-base';
 import { DropDownList } from '@syncfusion/ej2-dropdowns';
 import { query } from '@angular/animations';
+import { Query } from '@syncfusion/ej2-data';
 @Component({
   selector: 'app-scheduler',
   providers: [DayService, WeekService, WorkWeekService, MonthService],
-  template: `<ejs-schedule width='100%' height='550px' [readonly]="readonly" [selectedDate]="selectedDate" [eventSettings]="eventSettings" (popupOpen)='onPopupOpen($event)'
+  template: `
+    <select #locationFilter (change)="onLocationFilterChange(locationFilter.value)">
+  <option value="">All Locations</option>
+  <option value="tribunal1">tribunal1</option>
+  <option value="tribunal2">tribunal2</option>
+  <option value="tribunal3">Location3</option>
+  <!-- Add more location options as needed -->
+</select>
+  <ejs-schedule #scheduleObj width='100%' height='550px' [readonly]="readonly" [selectedDate]="selectedDate" [eventSettings]="eventSettings" (popupOpen)='onPopupOpen($event)'
   (dragStart) = "onDragStart($event)" [views]='scheduleViews'
   >
-    </ejs-schedule>`
+<!--  
+    </ejs-schedule>
+    <ejs-dropdownlist
+      #locationDropdown
+      [dataSource]="locationData"
+      [fields]="locationFields"
+      [value]="defaultLocationId"
+      (change)="onLocationChange($event)"
+    ></ejs-dropdownlist> -->
+
+    `
 })
 export class SchedulerComponent implements OnInit{
   ngOnInit(): void {
     // this.loadAudienceEvents();
+    this.loadData(); 
   }
   constructor(private audienceService: AudienceService) {}
   public readonly: boolean = false;
   @ViewChild("scheduleObj") scheduleObj?: ScheduleComponent;
   @ViewChild("addButton") addButton?: ButtonComponent;
+  @ViewChild('locationDropdown') locationDropdown!: DropDownList;
+  
+  public dropdownFields: Object = { text: 'location', value: 'location' };
+  private eventsData: Object[] = [];
+  private loadData(): void {
+    this.dataManager.executeQuery(new Query()).then((e: ReturnOption) => {
+      this.eventsData = e.result as Object[];
+    });
+  }
+  public onLocationFilterChange(selectedLocation: string): void {
+    // Check if events data is available before applying the filter
+    if (this.eventsData.length > 0) {
+      // Use the 'setProperties' method of the Schedule component to filter events
+      this.scheduleObj?.setProperties({ eventSettings: { dataSource: this.getFilteredEvents(selectedLocation) } });
+    }
+  }
+  private getFilteredEvents(selectedLocation: string): Object[] {
+    // If no location is selected, return all events
+    if (!selectedLocation) {
+      return this.eventsData;
+    }
+
+    // Filter events based on the selected location
+    return this.eventsData.filter(event => event['location'] === selectedLocation);
+  }
   public selectedDate: Date = new Date(2023, 7, 24);
   public scheduleViews: View[] = ['Day', 'Week', 'WorkWeek', 'Month'];
   private dataManager: DataManager = new DataManager({
@@ -32,7 +77,64 @@ export class SchedulerComponent implements OnInit{
     adaptor: new UrlAdaptor,
     crossDomain: true
   });
+  // locationData: any[] = [
+  //   { text: 'bnousonou', value: 1 },
+  //   { text: 'Location 2', value: 2 },
+  //   // Add more locations as needed
+  // ];
   
+  // locationFields: any = { text: 'text', value: 'value' };
+  // defaultLocationId: number = 1; 
+  // onLocationChange(args: ChangeEventArgs): void {
+  //   console.log("wwwwwwwwwwwwwww");
+  //   const selectedLocationId = args.name;
+  //   console.log(selectedLocationId);
+  //   const updatedApiUrl = `http://localhost:8081/picosoft/api/schedule/selectByLocation?location=${selectedLocationId}`;
+    
+  //   // Update the adaptor URL with the updated API URL  
+  //   this.dataManager.adaptor = new UrlAdaptor({ url: updatedApiUrl });
+  
+  //   // Refresh the Scheduler to load events from the updated API URL
+  //   this.scheduleObj?.refresh();
+  // }
+  // onLocationChange(args: any): void {
+  //   console.log('Dropdown change event:', args);
+  
+  //   if (!args.isInteracted) {
+  //     // The change event might be triggered programmatically
+  //     return;
+  //   }
+  
+  //   console.log('Selected location:', args.itemData);
+  
+  //   const selectedLocationId = args.itemData.text;
+  //   const updatedApiUrl = `http://localhost:8081/picosoft/api/schedule/selectByLocation?location=${selectedLocationId}`;
+  //   console.log('Selected Location ID:', selectedLocationId);
+  //   console.log('url:', updatedApiUrl);
+  //   // Update the adaptor URL with the updated API URL
+  //   this.dataManager.adaptor = new UrlAdaptor({ url: updatedApiUrl });
+  
+  //   // Load data from the updated API URL using the DataManager's executeQuery method
+  //   this.dataManager.executeQuery(new Query()).then((e: any) => {
+      
+  //     // Check if scheduleObj is defined before accessing its properties
+  //     if (this.scheduleObj) {
+  //       // Get the eventSettings object
+  //       const eventSettings = this.scheduleObj.eventSettings;
+        
+  //       if (eventSettings) {
+  //         // Assign the loaded data to the Scheduler's dataSource
+  //         eventSettings.dataSource = e.result;
+  //         console.log('eventSettings:', eventSettings.dataSource);
+  //         this.scheduleObj.refresh();
+  //       }
+  //     }
+  //   });
+  // }
+   
+ 
+  // Helper method to get the filtered events based on the selected location
+   
   public eventSettings: EventSettingsModel = {
     includeFiltersInQuery: true,dataSource: this.dataManager, fields: {
       juge :{name:'juge'},
@@ -43,8 +145,8 @@ export class SchedulerComponent implements OnInit{
       startTime: { name: 'startTime'  },
       endTime: { name: 'endTime'},
       recurrenceRule: { name: 'ShipRegion' },
-      demandeur: { name: 'demandeur' },
-      defendeur: { name: 'defendeur' },
+      demandeur: { name: 'demandeur',validation: { required: true } },
+      defendeur: { name: 'defendeur' ,validation: { required: true }},
       
     }
   };

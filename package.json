@@ -22,6 +22,7 @@
     "@ngx-translate/core": "14.0.0",
     "@ngx-translate/http-loader": "7.0.0",
     "@syncfusion/ej2-angular-buttons": "^22.1.39",
+    "@syncfusion/ej2-angular-dropdowns": "^22.2.5",
     "@syncfusion/ej2-angular-schedule": "^22.1.38",
     "@syncfusion/ej2-data": "^22.1.38",
     "@syncfusion/ej2-material-theme": "~22.1.38",

@@ -32,7 +32,7 @@ import { NotFoundComponent } from './pages/errors/not-found/not-found.component'
 import { FlagsMenuComponent } from './theme/components/flags-menu/flags-menu.component';
 import { ScheduleModule, RecurrenceEditorModule , DayService,WeekService,WorkWeekService,MonthService,MonthAgendaService } from '@syncfusion/ej2-angular-schedule';
 import { SchedulerComponent } from './pages/scheduler/scheduler.component';
-
+import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 @NgModule({  
   imports: [
     BrowserModule,
@@ -46,7 +46,7 @@ import { SchedulerComponent } from './pages/scheduler/scheduler.component';
         deps: [HttpClient]
       }
     }),
-    ScheduleModule, RecurrenceEditorModule
+    ScheduleModule, RecurrenceEditorModule,DropDownListModule
   ],
   declarations: [
     AppComponent,
