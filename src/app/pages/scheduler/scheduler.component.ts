@@ -7,6 +7,7 @@ import { parseISO } from 'date-fns';
 import { DataManager, ODataV4Adaptor, UrlAdaptor } from '@syncfusion/ej2-data';
 import { createElement } from '@syncfusion/ej2-base';
 import { DropDownList } from '@syncfusion/ej2-dropdowns';
+import { query } from '@angular/animations';
 @Component({
   selector: 'app-scheduler',
   providers: [DayService, WeekService, WorkWeekService, MonthService],
@@ -82,6 +83,7 @@ export class SchedulerComponent implements OnInit{
 //   }
 // }
  
+//underlined Juge field
 onPopupOpen(args: PopupOpenEventArgs): void {
   if (args.type === 'Editor') {
       // Create required custom elements in initial time
@@ -90,10 +92,34 @@ onPopupOpen(args: PopupOpenEventArgs): void {
           let formElement: HTMLElement = args.element.querySelector('.e-schedule-form') as HTMLElement;
           formElement.firstChild?.insertBefore(row, args.element.querySelector('.e-title-location-row'));
           let container: HTMLElement = createElement('div', { className: 'custom-field-container' });
+          //add a div with class " e-float-input e-control-wrapper e-input-group " inside container and ari
+          let container2: HTMLInputElement = createElement('input', {
+              className: 'e-float-input e-control-wrapper e-input-group e-field', attrs: {title:'Juge', name: 'juge', 'aria-labelledby':"label_juge"}
+          }) as HTMLInputElement;
+          
+          
+          let spanLine: HTMLElement = createElement('span', { className: 'e-float-line' });
+          // add label with class e-float-text e-label-top 
+          let labelEle: HTMLElement = createElement('label', {
+            innerHTML: 'Juge:',
+            className: 'e-float-text e-label-top',
+            id:'label_juge',
+            attrs: { for: 'juge' }
+          });
+          
           let inputEle: HTMLInputElement = createElement('input', {
               className: 'e-field', attrs: { name: 'juge' }
           }) as HTMLInputElement;
-          container.appendChild(inputEle);
+          
+          container.appendChild(container2);
+          container2.appendChild(inputEle);
+
+          //let litleRow:HTMLElement = args.element.querySelector('.e-title-location-row');
+          //appent to title location row
+          //inputEle.appendChild(litleRow);
+          //add spanafter inputEle
+          container2.appendChild(spanLine);
+          container2.appendChild(labelEle);
           row.appendChild(container);
          
           inputEle.setAttribute('name', 'juge');
