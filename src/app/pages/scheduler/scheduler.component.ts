@@ -1,15 +1,17 @@
 import { Component,OnInit, ViewChild } from '@angular/core';
-import { ScheduleComponent, EventSettingsModel, DayService, WeekService, WorkWeekService, MonthService, View, DragEventArgs } from '@syncfusion/ej2-angular-schedule';
+import { ScheduleComponent, EventSettingsModel, DayService, WeekService, WorkWeekService, MonthService, View, DragEventArgs, PopupOpenEventArgs } from '@syncfusion/ej2-angular-schedule';
 import { ButtonComponent } from '@syncfusion/ej2-angular-buttons';
 import { AudienceService } from 'src/app/service/audience.service';
 import { AudienceEvent } from './AudienceEvent'; 
 import { parseISO } from 'date-fns';
 import { DataManager, ODataV4Adaptor, UrlAdaptor } from '@syncfusion/ej2-data';
-
+import { createElement } from '@syncfusion/ej2-base';
+import { DropDownList } from '@syncfusion/ej2-dropdowns';
 @Component({
   selector: 'app-scheduler',
   providers: [DayService, WeekService, WorkWeekService, MonthService],
-  template: `<ejs-schedule width='100%' height='550px' [readonly]="readonly" [selectedDate]="selectedDate" [eventSettings]="eventSettings"></ejs-schedule>`
+  template: `<ejs-schedule width='100%' height='550px' [readonly]="readonly" [selectedDate]="selectedDate" [eventSettings]="eventSettings" (popupOpen)='onPopupOpen($event)'>
+    </ejs-schedule>`
 })
 export class SchedulerComponent implements OnInit{
   ngOnInit(): void {
@@ -42,6 +44,35 @@ export class SchedulerComponent implements OnInit{
   onDragStart(args: DragEventArgs): void {
     args.scroll = { enable: true, scrollBy: 5, timeDelay: 200 };
 }
+// add field juge 
+onPopupOpen(args: PopupOpenEventArgs): void {
+  if (args.type === 'Editor') {
+      // Create required custom elements in initial time
+      if (!args.element.querySelector('.custom-field-row')) {
+          let row: HTMLElement = createElement('div', { className: 'custom-field-row' });
+          let formElement: HTMLElement = args.element.querySelector('.e-schedule-form') as HTMLElement;
+          formElement.firstChild?.insertBefore(row, args.element.querySelector('.e-title-location-row'));
+          let container: HTMLElement = createElement('div', { className: 'e-description-container' });
+          let inputEle: HTMLInputElement = createElement('input', {
+              className: 'e-float-input e-control-wrapper e-input-group', attrs: { name: 'juge',type: 'text','aria-labelledby': 'label_subject'}
+          }) as HTMLInputElement;
+          // Add the label
+      let labelEle: HTMLElement = createElement('label', {
+        innerHTML: 'Juge:',
+        className: 'e-float-text e-label-top',
+        id:'label_subject',
+        attrs: { for: 'description' }
+      });
+      container.appendChild(labelEle);
+
+          container.appendChild(inputEle);
+          row.appendChild(container);
+    
+          inputEle.setAttribute('name', 'juge');
+      }
+  }
+}
+ 
 
   
 
